@@ -7,6 +7,7 @@
 var app = require("../app");
 var debug = require("debug")("gmart:server");
 var http = require("http");
+var mongoose = require("mongoose");
 
 /**
  * Get port from environment and store in Express.
@@ -14,6 +15,19 @@ var http = require("http");
 
 var port = normalizePort(process.env.PORT || "6969");
 app.set("port", port);
+
+var connnection = mongoose.connect(
+  "mongodb+srv://admin:admin123@cluster0.le88c.mongodb.net/GMart?retryWrites=true&w=majority",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+);
+
+var con = mongoose.connection;
+con.on("error", function () {
+  console.log("Error connecting to mongodb server!");
+});
+con.on("open", function () {
+  console.log("Connection done!");
+});
 
 /**
  * Create HTTP server.
