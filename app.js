@@ -6,6 +6,7 @@ var logger = require("morgan");
 var hbs = require("hbs");
 
 var indexRouter = require("./routes/index");
+var userRouter = require("./routes/user");
 
 var app = express();
 
@@ -17,11 +18,14 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+
+const publicpath = path.join(__dirname, "./public");
 
 hbs.registerPartials(path.join(__dirname, "./views/partials"));
+app.use(express.static(publicpath));
 
 app.use("/", indexRouter);
+app.use("/user", userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
