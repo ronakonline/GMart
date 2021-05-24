@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     first_name: {
       type: String,
@@ -22,14 +23,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    created_at: {
-      type: Date,
-      dafault: Date.now,
-    },
-    updated_at: {
-      type: Date,
-      default: Date.now,
-    },
+
     last_login: {
       type: Date,
       default: Date.now,
@@ -38,12 +32,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
     },
     status: {
-      type: Boolean,
+      type: String,
+      default: "Pending",
     },
     code_varification: {
       type: String,
-    }
-
+    },
   },
   { timestamps: true }
 );
