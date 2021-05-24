@@ -7,3 +7,9 @@ function createuser(req, res) {
 module.exports = {
   createuser,
 };
+function curuser(req, res){
+  const errors = validationResult(req);
+}
+module.exports = {
+  curuser,
+};

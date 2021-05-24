@@ -21,5 +21,10 @@ router.post(
   userValidation.Registrationvalidation,
   userController.createuser
 );
+router.get(
+  "/register",
+  userValidation.loginvalidation,
+  userController.curuser
+);
 
 module.exports = router;
