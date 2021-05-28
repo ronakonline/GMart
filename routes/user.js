@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const { validationResult } = require("express-validator");
+var flash = require("connect-flash");
 
 var userModel = require("../models/user");
 var userController = require("../controllers/userController");
@@ -13,7 +14,7 @@ router.get("/login", async (req, res) => {
 });
 
 router.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register", { message: req.flash("info") });
 });
 
 router.post(
@@ -21,10 +22,7 @@ router.post(
   userValidation.Registrationvalidation,
   userController.createuser
 );
-router.get(
-  "/register",
-  userValidation.loginvalidation,
-  userController.curuser
-);
+
+router.post("/login", userValidation.loginvalidation, userController.login);
 
 module.exports = router;

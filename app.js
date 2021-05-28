@@ -4,11 +4,27 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var hbs = require("hbs");
+var flash = require("connect-flash");
+var session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 
 var app = express();
+
+app.use(
+  session({
+    secret: "cats",
+    saveUninitialized: true,
+    resave: true,
+  })
+);
+app.use(function (req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
+
+app.use(flash());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
