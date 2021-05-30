@@ -7,9 +7,7 @@ var userModel = require("../models/user");
 var userController = require("../controllers/userController");
 var userValidation = require("../validation/userValidation");
 
-router.get("/login", async (req, res) => {
-  var users = await userModel.find();
-  //  res.json(users);
+router.get("/login", (req, res) => {
   res.render("login");
 });
 
@@ -22,6 +20,16 @@ router.post(
   userValidation.Registrationvalidation,
   userController.createuser
 );
+
+router.get("/emailverify", (req, res) => {
+  //Checks if user email is in session
+  if (req.session.email) {
+    console.log(req.session);
+    res.render("emailverify");
+  } else {
+    throw new Error("Something Went Wrong");
+  }
+});
 
 router.post("/login", userValidation.loginvalidation, userController.login);
 
