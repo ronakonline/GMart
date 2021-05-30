@@ -1,5 +1,10 @@
 {{> csslinks}}
 {{> header}}
+{{#if errors}}
+    {{#each errors}}
+        <script>alert('{{this.msg}}')</script>
+     {{/each}}
+{{/if}}
 
 <div class="breadcrumb-section">
         <div class="container">

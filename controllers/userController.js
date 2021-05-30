@@ -10,6 +10,10 @@ function createuser(req, res) {
 
 function login(req, res) {
   const errors = validationResult(req);
+  if (errors) {
+    res.render("login", { errors: errors.array() });
+  } else {
+  }
 }
 
 module.exports = {
