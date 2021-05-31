@@ -70,13 +70,16 @@ router.get("/emailverify", (req, res) => {
   //Checks if user email is in session
   if (req.session.email) {
     console.log(req.session);
-    res.render("emailverify");
+    res.render("emailverify",{message: req.flash("resend")});
   } else {
     throw new Error("Something Went Wrong");
   }
 });
 
 router.get("/verifyemail", userController.verifyemail);
+
+router.get("/resendemail", userController.resendemail);
+
 
 router.post(
   "/login",
