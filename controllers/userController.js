@@ -69,55 +69,48 @@ async function verifyemail(req, res) {
   }
 }
 
-async function resendemail(req, res){
-  userModel.findOne({email:req.query.email},(error, user)  =>{
-    if(error){
-            console.log("error");
-    }else {
-      if(user){
-         //Sending a verification email to user
-         let message = "<h1>Verify your account!</h1><p><a href='";
-         message += `http://localhost:6969/user/verifyemail?email=${user.email}&token=${user.code_varification}`;
-         message += "'>click here</a></p>";
-         var mailOptions = {
-           from: "ronak@gmail.com",
-           to: user.email,
-           subject: "Email Verification",
-           html: message,
-         };
-         nodemailer(mailOptions);
-         req.flash("resend","Email sent");
-         res.redirect("emailverify");
+async function resendemail(req, res) {
+  userModel.findOne({ email: req.query.email }, (error, user) => {
+    if (error) {
+      console.log("error");
+    } else {
+      if (user) {
+        //Sending a verification email to user
+        let message = "<h1>Verify your account!</h1><p><a href='";
+        message += `http://localhost:6969/user/verifyemail?email=${user.email}&token=${user.code_varification}`;
+        message += "'>click here</a></p>";
+        var mailOptions = {
+          from: "ronak@gmail.com",
+          to: user.email,
+          subject: "Email Verification",
+          html: message,
+        };
+        nodemailer(mailOptions);
+        req.flash("resend", "Email sent");
+        res.redirect("emailverify");
       }
-      
     }
-  })
+  });
 }
 
 function login(req, res) {
-   if( req.user.status == "Pending"){
-// Sending a verification email to user
-let message = "<h1>Verify your account!</h1><p><a href='";
-message += `http://localhost:6969/user/verifyemail?email=${
-    req.user.email
-}&token=${
-    req.user.code_varification
-}`;
-message += "'>click here</a></p>";
-var mailOptions = {
-    from: "ronak@gmail.com",
-    to: req.user.email,
-    subject: "Email Verification",
-    html: message
-};
-nodemailer(mailOptions);
-  req.flash("error","check your mailbox for verification");
-  res.redirect("login");
-   }else if ( req.user.status == "Verified" )
-   {
-      res.redirect("/");
-   }
-
+  if (req.user.status == "Pending") {
+    // Sending a verification email to user
+    let message = "<h1>Verify your account!</h1><p><a href='";
+    message += `http://localhost:6969/user/verifyemail?email=${req.user.email}&token=${req.user.code_varification}`;
+    message += "'>click here</a></p>";
+    var mailOptions = {
+      from: "ronak@gmail.com",
+      to: req.user.email,
+      subject: "Email Verification",
+      html: message,
+    };
+    nodemailer(mailOptions);
+    req.flash("error", "check your mailbox for verification");
+    res.redirect("login");
+  } else if (req.user.status == "Verified") {
+    res.redirect("/");
+  }
 }
 
 module.exports = {
