@@ -6,6 +6,21 @@ var session = require("express-session");
 const nodemailer = require("../config/email");
 const saltRounds = 10;
 
+function sendverificationmail(email, token) {
+  //Sending a verification email to user
+  let message = "<h1>Verify your account!</h1><p><a href='";
+  message += `http://localhost:6969/user/verifyemail?email=${email}&token=${token}`;
+  message += "'>click here</a></p>";
+  var mailOptions = {
+    from: "ronak@gmail.com",
+    to: email,
+    subject: "Email Verification",
+    html: message,
+  };
+  nodemailer(mailOptions);
+  return;
+}
+
 async function createuser(req, res) {
   const errors = validationResult(req);
   console.log(errors);
@@ -22,23 +37,13 @@ async function createuser(req, res) {
           last_name: req.body.lname,
           password: hash,
           active: false,
-          code_varification: token,
+          code_verification: token,
         },
         (error, user) => {
           if (error) {
             console.log(error);
           } else {
-            //Sending a verification email to user
-            let message = "<h1>Verify your account!</h1><p><a href='";
-            message += `http://localhost:6969/user/verifyemail?email=${user.email}&token=${user.code_varification}`;
-            message += "'>click here</a></p>";
-            var mailOptions = {
-              from: "ronak@gmail.com",
-              to: user.email,
-              subject: "Email Verification",
-              html: message,
-            };
-            nodemailer(mailOptions);
+            sendverificationmail(user.email, user.code_verification);
             req.session.email = user.email;
             res.redirect("emailverify");
           }
@@ -54,7 +59,7 @@ async function verifyemail(req, res) {
 
   const user = await userModel.findOne({
     email: email,
-    code_varification: token,
+    code_verification: token,
   });
   if (user) {
     user.status = "Verified";
@@ -75,17 +80,7 @@ async function resendemail(req, res) {
       console.log("error");
     } else {
       if (user) {
-        //Sending a verification email to user
-        let message = "<h1>Verify your account!</h1><p><a href='";
-        message += `http://localhost:6969/user/verifyemail?email=${user.email}&token=${user.code_varification}`;
-        message += "'>click here</a></p>";
-        var mailOptions = {
-          from: "ronak@gmail.com",
-          to: user.email,
-          subject: "Email Verification",
-          html: message,
-        };
-        nodemailer(mailOptions);
+        sendverificationmail(user.email, user.code_verification);
         req.flash("resend", "Email sent");
         res.redirect("emailverify");
       }
@@ -95,17 +90,7 @@ async function resendemail(req, res) {
 
 function login(req, res) {
   if (req.user.status == "Pending") {
-    // Sending a verification email to user
-    let message = "<h1>Verify your account!</h1><p><a href='";
-    message += `http://localhost:6969/user/verifyemail?email=${req.user.email}&token=${req.user.code_varification}`;
-    message += "'>click here</a></p>";
-    var mailOptions = {
-      from: "ronak@gmail.com",
-      to: req.user.email,
-      subject: "Email Verification",
-      html: message,
-    };
-    nodemailer(mailOptions);
+    sendverificationmail(req.user.email, req.user.code_verification);
     req.flash("error", "check your mailbox for verification");
     res.redirect("login");
   } else if (req.user.status == "Verified") {
@@ -113,9 +98,15 @@ function login(req, res) {
   }
 }
 
+function logout(req, res) {
+  req.logout();
+  res.redirect("login");
+}
+
 module.exports = {
   createuser,
   login,
   verifyemail,
   resendemail,
+  logout,
 };

@@ -32,8 +32,13 @@
               <i class="fa fa-user" aria-hidden="true"></i>
               My Account
               <ul class="onhover-show-div">
-                <li><a href="/user/login" data-lng="en">Login</a></li>
-                <li><a href="#" data-lng="es">Logout</a></li>
+                {{#if name}}
+                 <li>Welcome {{name}}</li>
+                <li><a href="/user/account" data-lng="es">My Account</a></li>
+                <li><a href="/user/logout" data-lng="es">Logout</a></li>
+                {{else}}
+                 <li><a href="/user/login" data-lng="en">Login</a></li>
+                {{/if}}
               </ul>
             </li>
           </ul>

@@ -54,6 +54,7 @@ router.get("/login", (req, res) => {
     message: req.flash("info"),
     error: req.flash("error"),
   });
+  console.log(req.user);
 });
 
 router.get("/register", (req, res) => {
@@ -88,5 +89,7 @@ router.post(
   }),
   userController.login
 );
+
+router.get("/logout", userController.logout);
 
 module.exports = router;

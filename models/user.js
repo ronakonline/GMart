@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "Pending",
     },
-    code_varification: {
+    code_verification: {
       type: String,
     },
   },
