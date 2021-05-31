@@ -8,9 +8,9 @@ exports.Registrationvalidation = [
     .trim()
     .escape()
     .withMessage("First Name Required!"),
-  check("lname").not().isEmpty().trim().escape(),
-  check("email").isEmail().normalizeEmail(),
-  check("password").not().isEmpty().trim().escape(),
+  check("lname").not().isEmpty().trim().escape().withMessage("Last name Required!"),
+  check("email").isEmail().normalizeEmail().withMessage(" Email Required!"),
+  check("password").not().isEmpty().trim().escape().withMessage(" Password Required!"),
   check("email").custom(async (val) => {
     var user = await userModel.exists({ email: val });
     console.log(user);
@@ -21,6 +21,6 @@ exports.Registrationvalidation = [
   }),
 ];
 exports.loginvalidation = [
-  check("email").not().isEmpty().trim().escape(),
-  check("password").not().isEmpty().trim().escape(),
+  check("email").not().isEmpty().trim().escape().withMessage("Email Required!"),
+  check("password").not().isEmpty().trim().escape().withMessage("password Required!"),
 ];

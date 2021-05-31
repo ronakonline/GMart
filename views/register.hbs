@@ -2,7 +2,7 @@
 {{> header}}
 {{#if errors}}
     {{#each errors}}
-        <script>alert('{{this.msg}}')</script>
+        <script> alertify.error('{{this.msg}}')</script>
      {{/each}}
 {{/if}}
  <!-- breadcrumb start -->
@@ -39,7 +39,7 @@
                                 <div class="col-md-6">
                                     <label for="email">First Name</label>
                                     <input type="text" class="form-control" id="fname" placeholder="First Name"
-                                        name="fname" >
+                                        name="fname" required >
                                 </div>
                                 <div class="col-md-6">
                                     <label for="review">Last Name</label>
