@@ -1,3 +1,11 @@
+
+{{#if message}}
+        <script> alertify.success('{{message}}')</script>
+{{/if}}
+{{#if error}}
+        <script> alertify.error('{{error}}')</script>
+{{/if}}
+
 <!-- header start -->
 <header>
   <div class="mobile-fix-option"></div>

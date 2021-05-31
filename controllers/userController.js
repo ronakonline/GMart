@@ -30,7 +30,7 @@ async function createuser(req, res) {
           } else {
             //Sending a verification email to user
             let message = "<h1>Verify your account!</h1><p><a href='";
-            message += `/verifyemail?email=${user.email}&token=${user.code_varification}`;
+            message += `http://localhost:6969/user/verifyemail?email=${user.email}&token=${user.code_varification}`;
             message += "'>click here</a></p>";
             var mailOptions = {
               from: "ronak@gmail.com",
@@ -48,15 +48,31 @@ async function createuser(req, res) {
   }
 }
 
-function login(req, res) {
-  const errors = validationResult(req);
-  if (errors) {
-    res.render("login", { errors: errors.array() });
+async function verifyemail(req, res) {
+  const email = req.query.email;
+  const token = req.query.token;
+
+  const user = await userModel.findOne({
+    email: email,
+    code_varification: token,
+  });
+  if (user) {
+    user.status = "Verified";
+    await user.save();
+    req.flash("info", "Account Verified!");
+    console.log("User Verified!");
+    res.redirect("login");
   } else {
+    req.flash("error", "Invalid Verification Link!");
+    console.log("Invalid Token!");
+    res.redirect("login");
   }
 }
+
+function login(req, res) {}
 
 module.exports = {
   createuser,
   login,
+  verifyemail,
 };

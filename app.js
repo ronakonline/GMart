@@ -6,7 +6,7 @@ var logger = require("morgan");
 var hbs = require("hbs");
 var flash = require("connect-flash");
 var session = require("express-session");
-
+var passport = require("passport");
 var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user");
 
@@ -24,6 +24,8 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 // view engine setup
