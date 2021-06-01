@@ -103,8 +103,6 @@ function logout(req, res) {
   res.redirect("login");
 }
 
-<<<<<<< Updated upstream
-=======
 //method to forgot password validate email and send change password verification link to email
 async function forgotpassword(req, res) {
   await userModel.findOne({ email: req.body.email }, (error, user) => {
@@ -224,19 +222,15 @@ async function updateprofile(req, res) {
   });
 }
 
->>>>>>> Stashed changes
 module.exports = {
   createuser,
   login,
   verifyemail,
   resendemail,
   logout,
-<<<<<<< Updated upstream
-=======
   forgotpassword,
   changenewpassword,
   updatenewpassword,
   updatepassword,
   updateprofile,
->>>>>>> Stashed changes
 };

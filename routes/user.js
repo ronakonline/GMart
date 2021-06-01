@@ -49,9 +49,6 @@ passport.use(
   )
 );
 
-<<<<<<< Updated upstream
-router.get("/login", (req, res) => {
-=======
 //middelware to redirect user to home page if user is already logged in accessing other routes for login
 function LoggedIn(req, res, next) {
   if (req.user) {
@@ -71,7 +68,6 @@ function IsLoggedIn(req, res, next) {
 }
 
 router.get("/login", LoggedIn, (req, res) => {
->>>>>>> Stashed changes
   res.render("login", {
     message: req.flash("info"),
     error: req.flash("error"),
@@ -114,8 +110,6 @@ router.post(
 
 router.get("/logout", IsLoggedIn, userController.logout);
 
-<<<<<<< Updated upstream
-=======
 router.get("/account", IsLoggedIn, (req, res) => {
   res.render("account", req.user);
 });
@@ -155,5 +149,4 @@ router.get("/updateprofile", IsLoggedIn, (req, res) => {
 
 router.post("/updateprofile", IsLoggedIn, userController.updateprofile);
 
->>>>>>> Stashed changes
 module.exports = router;
