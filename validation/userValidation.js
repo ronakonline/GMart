@@ -8,9 +8,19 @@ exports.Registrationvalidation = [
     .trim()
     .escape()
     .withMessage("First Name Required!"),
-  check("lname").not().isEmpty().trim().escape().withMessage("Last name Required!"),
+  check("lname")
+    .not()
+    .isEmpty()
+    .trim()
+    .escape()
+    .withMessage("Last name Required!"),
   check("email").isEmail().normalizeEmail().withMessage(" Email Required!"),
-  check("password").not().isEmpty().trim().escape().withMessage(" Password Required!"),
+  check("password")
+    .not()
+    .isEmpty()
+    .trim()
+    .escape()
+    .withMessage(" Password Required!"),
   check("email").custom(async (val) => {
     var user = await userModel.exists({ email: val });
     console.log(user);
@@ -22,5 +32,18 @@ exports.Registrationvalidation = [
 ];
 exports.loginvalidation = [
   check("email").not().isEmpty().trim().escape().withMessage("Email Required!"),
-  check("password").not().isEmpty().trim().escape().withMessage("password Required!"),
+  check("password")
+    .not()
+    .isEmpty()
+    .trim()
+    .escape()
+    .withMessage("password Required!"),
+];
+exports.confirmpassword = [
+  check("confirmpassword").custom((value, { req }) => {
+    if (value != req.body.password) {
+      throw new Error("Confirm Password not matches Password!");
+    }
+    return true;
+  }),
 ];

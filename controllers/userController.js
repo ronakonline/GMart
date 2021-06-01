@@ -184,7 +184,10 @@ async function updatepassword(req, res) {
     res.redirect("updatepassword");
   } else {
     if (!errors.isEmpty()) {
-      res.render("updatepassword", { errors: errors.array() });
+      res.render("updatepassword", {
+        errors: errors.array(),
+        first_name: req.user.first_name,
+      });
     } else {
       await userModel.findOne({ email: req.user.email }, (error, user) => {
         if (error) {
