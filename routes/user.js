@@ -49,7 +49,29 @@ passport.use(
   )
 );
 
+<<<<<<< Updated upstream
 router.get("/login", (req, res) => {
+=======
+//middelware to redirect user to home page if user is already logged in accessing other routes for login
+function LoggedIn(req, res, next) {
+  if (req.user) {
+    res.redirect("/");
+  } else {
+    next();
+  }
+}
+
+//middelware to refirect user to login page if user trying to access protected routes
+function IsLoggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect("login");
+  }
+}
+
+router.get("/login", LoggedIn, (req, res) => {
+>>>>>>> Stashed changes
   res.render("login", {
     message: req.flash("info"),
     error: req.flash("error"),
@@ -57,7 +79,7 @@ router.get("/login", (req, res) => {
   console.log(req.user);
 });
 
-router.get("/register", (req, res) => {
+router.get("/register", LoggedIn, (req, res) => {
   res.render("register", { message: req.flash("info") });
 });
 
@@ -67,7 +89,7 @@ router.post(
   userController.createuser
 );
 
-router.get("/emailverify", (req, res) => {
+router.get("/emailverify", IsLoggedIn, (req, res) => {
   //Checks if user email is in session
   if (req.session.email) {
     console.log(req.session);
@@ -77,9 +99,9 @@ router.get("/emailverify", (req, res) => {
   }
 });
 
-router.get("/verifyemail", userController.verifyemail);
+router.get("/verifyemail", IsLoggedIn, userController.verifyemail);
 
-router.get("/resendemail", userController.resendemail);
+router.get("/resendemail", IsLoggedIn, userController.resendemail);
 
 router.post(
   "/login",
@@ -90,6 +112,48 @@ router.post(
   userController.login
 );
 
-router.get("/logout", userController.logout);
+router.get("/logout", IsLoggedIn, userController.logout);
 
+<<<<<<< Updated upstream
+=======
+router.get("/account", IsLoggedIn, (req, res) => {
+  res.render("account", req.user);
+});
+
+router.get("/forgotpassword", LoggedIn, (req, res) => {
+  res.render("forgotpassword", { error: req.flash("error") });
+});
+
+router.post("/forgotpassword", userController.forgotpassword);
+
+router.get("/changenewpassword", LoggedIn, userController.changenewpassword);
+
+router.post(
+  "/changenewpassword",
+  userValidation.confirmpassword,
+  userController.updatenewpassword
+);
+
+router.get("/updatepassword", IsLoggedIn, (req, res) => {
+  res.render("updatepassword", {
+    message: req.flash("info"),
+    error: req.flash("error"),
+    first_name: req.user.first_name,
+  });
+});
+
+router.post(
+  "/updatepassword",
+  IsLoggedIn,
+  userValidation.confirmpassword,
+  userController.updatepassword
+);
+
+router.get("/updateprofile", IsLoggedIn, (req, res) => {
+  res.render("updateprofile", req.user);
+});
+
+router.post("/updateprofile", IsLoggedIn, userController.updateprofile);
+
+>>>>>>> Stashed changes
 module.exports = router;
